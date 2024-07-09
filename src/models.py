@@ -10,10 +10,14 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
-    username = Column(String(100))
-    firstname = Column(String(50))
-    lastname = Column(String(50))
-    email = Column(String(30))
+    username = Column(String(100), unique=True, nullable=False)
+    firstname = Column(String(100), nullable=False)
+    lastname = Column(String(100), nullable=False)
+    email = Column(String(100), unique=True, nullable=False)
+    followers = relationship('follower')
+    posts = relationship('post')
+    comments = relationship('comment')
+
 
 class Follower(Base):
     __tablename__ = 'follower'
@@ -33,13 +37,15 @@ class Post(Base):
     __tablename__ = 'post'
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey('user.id'))
+    comments = relationship('coment')
+    medias = relationship('media')
 
 class Media(Base):
     __tablename__ = 'meida'
     id = Column(Integer, primary_key=True)
-    #type = Column(enumerate('user.id'))
+    type = Column(Integer, nullable=False)
     url = Column(String(100))
-    post_id = Column(Integer, ForeignKey('post_id'))
+    post_id = Column(Integer, ForeignKey('post.id'))
 
 ## Draw from SQLAlchemy base
 try:
